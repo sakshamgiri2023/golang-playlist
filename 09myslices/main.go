@@ -33,4 +33,12 @@ func main() {
 	sort.Ints(highSore)
 	fmt.Println(highSore)
 
+	//how to remove a value from slice based on index in golang
+
+	var courses = []string{"reactjs", "javascript", "swift", "python", "ruby"}
+	fmt.Println(courses)
+	var index int = 2
+	courses = append(courses[:index], courses[index+1:]...)
+	fmt.Println(courses)
+
 }
