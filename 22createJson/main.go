@@ -15,7 +15,9 @@ type course struct {
 
 func main() {
 	fmt.Println("creating a json in golang")
-	EncodeJson()
+	// EncodeJson()
+	// DecodeJson()
+	DecodeJson()
 
 }
 
@@ -29,4 +31,37 @@ func EncodeJson() {
 
 	finalJson, _ := json.MarshalIndent(lcoCourses, "", "\t")
 	fmt.Printf("%s\n", finalJson)
+}
+
+func DecodeJson() {
+
+	jsonDataFromWeb := []byte(`
+	 {
+                "coursename": "angular bootcamp",
+                "Price": 2999,
+                "website": "lco.in",
+                "welcome to tags[]": null,
+        }
+	
+	`)
+
+	var lcoCourses course
+
+	checkJson := json.Valid(jsonDataFromWeb)
+
+	if checkJson {
+		fmt.Println("json was  valid")
+		json.Unmarshal(jsonDataFromWeb, &lcoCourses)
+		fmt.Printf("%#v\n", lcoCourses)
+	} else {
+		fmt.Println("json was invalid")
+	}
+
+	var myOnineData map[string]interface{}
+	json.Unmarshal(jsonDataFromWeb, &myOnineData)
+	fmt.Printf("%#v/n", myOnineData)
+
+	for k, v := range myOnineData {
+		fmt.Printf("key is %v and value is %v and type is: %T\n", k, v, v)
+	}
 }
