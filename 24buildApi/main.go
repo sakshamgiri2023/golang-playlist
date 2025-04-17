@@ -93,3 +93,37 @@ func createOneCourse(w http.ResponseWriter, r *http.Request) {
 	return
 
 }
+
+func updateOneCourse(w http.ResponseWriter, r *http.Request) {
+	fmt.Println("Create one course")
+	w.Header().Set("content-type", "application/json")
+
+	params := mux.Vars(r)
+
+	for index, course := range courses {
+		if course.CourseId == params["id"] {
+			courses = append(courses[:index], courses[index+1:]...)
+			var coures Course
+			_ = json.NewDecoder(r.Body).Decode(&coures)
+			course.CourseId = params["id"]
+			courses = append(courses, course)
+			json.NewEncoder(w).Encode(course)
+			return
+		}
+	}
+	//todo: send a respone when id is not found
+}
+
+func deleteOneCourse(w http.ResponseWriter, r *http.Request) {
+	fmt.Println("delete one course")
+	w.Header().Set("content-type", "application/json")
+
+	params := mux.Vars(r)
+
+	for index, course := range courses {
+		if course.CourseId == params["id"] {
+			courses = append(courses[:index], courses[index+1:]...)
+			break
+		}
+	}
+}
