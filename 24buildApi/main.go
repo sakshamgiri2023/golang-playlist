@@ -3,6 +3,7 @@ package main
 import (
 	"encoding/json"
 	"fmt"
+	"log"
 	"math/rand"
 	"net/http"
 	"strconv"
@@ -14,7 +15,7 @@ import (
 type Course struct {
 	CourseId    string  `json:"courseId"`
 	CourseName  string  `json:"coursename"`
-	CoursePrice string  `json:"price"`
+	CoursePrice int     `json:"price"`
 	Author      *Author `json:"author"`
 }
 
@@ -34,6 +35,23 @@ func (c *Course) IsEmpty() bool {
 }
 
 func main() {
+	fmt.Println("api-lcu")
+	r := mux.NewRouter()
+
+	//seeding
+	courses = append(courses, Course{CourseId: "2", CourseName: "reactjs", CoursePrice: 2445, Author: &Author{Fullname: "saksham giri", Website: "lcu.in"}})
+	courses = append(courses, Course{CourseId: "4", CourseName: "mern stack", CoursePrice: 2550, Author: &Author{Fullname: "pulkit giri", Website: "lcu.dev"}})
+
+	//routing
+	r.HandleFunc("/", serveHome).Methods("GET")
+	r.HandleFunc("/courses", getAllCourses).Methods("GET")
+	r.HandleFunc("/course/{id}", getOneCourse).Methods("GET")
+	r.HandleFunc("/course", createOneCourse).Methods("POST")
+	r.HandleFunc("/course/{id}", updateOneCourse).Methods("PUT")
+	r.HandleFunc("/course/{id}", deleteOneCourse).Methods("DELETE")
+
+	//listen to a port
+	log.Fatal(http.ListenAndServe(":4000", r))
 }
 
 //controller - file
